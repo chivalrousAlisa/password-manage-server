@@ -1,0 +1,99 @@
+#set ($locale = $i18nUtil.getCurrentLanguage())
+#if ($locale == "zh_CN")
+  #set($pageLangCode = "zh-cn")
+  #set($systemName = "采购平台")
+  #set($systemContactText = "请联系内线 1818-8")
+#elseif ($locale == "en_US")
+  #set($pageLangCode = "en")
+  #set($systemName = "Procurement mall")
+  #set($systemContactText = "Please contact the hotline 1818-8")
+#else
+  #set($pageLangCode = "zh-cn")
+  #set($systemName = "采购平台")
+  #set($systemContactText = "请联系内线 1818-8")
+#end
+#set($appName = "cg-mall")
+#set($tenant = $tenantRouterUtil.getUserTenantId())
+#if ($tenant == 'supplier')
+  #set($themeCode = 'alibaba/')
+#else
+  #set($themeCode = $tenant + '/')
+#end
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="data-spm" content="a1z8h"/>
+  <meta charset="utf-8">
+  <title>$!{pageName}$!{systemName}</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+  <link rel="shortcut icon" href="$cdnUtil.getCeresUrl()/images/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" charset="utf-8" href="//alinw.alicdn.com/??platform/common/s/1.1/global/global.css">
+
+  <!-- 审批流组件样式 -->
+  #if($cdnUtil.getModuleVersion("$!{appName}/approve-flow"))
+    <link rel="stylesheet" href="//$cdnUtil.getDomain()/platform/finance_approve_flow/$cdnUtil.getModuleVersion("$!{appName}/approve-flow")/app.css">
+  #end
+
+  <!-- cg-react -->
+  <link rel="stylesheet" charset="utf-8" href="//$cdnUtil.getDomain()/platform/cg-react/$cdnUtil.getModuleVersion("$!{appName}/cg-react")/reset.css">
+  <link rel="stylesheet" charset="utf-8" href="//$cdnUtil.getDomain()/platform/cg-react/$cdnUtil.getModuleVersion("$!{appName}/cg-react")/$!{themeCode}cg-react.css">
+
+  <!-- 项目 -->
+  <link rel="stylesheet" href="$cdnUtil.getModuleUrl("$!{appName}")/$!{themeCode}app.css">
+  #if($pageCodeCss)
+    <link rel="stylesheet" href="$cdnUtil.getModuleUrl("$!{appName}")/$!{themeCode}$!{pageCodeCss}.css">
+  #end
+</head>
+<body data-spm="$!{spmPageId}" class="cg-react">
+
+  #if($!disableHeaderFooter != true)
+    $control.setTemplate("infovmcommon/s/1.2/header.vm").setParameter("theme","v2016").setParameter("locale",$pageLangCode)
+  #end
+
+  <div id="App"></div>
+
+  $screen_placeholder
+
+  #if($!disableHeaderFooter != true)
+    $control.setTemplate("infovmcommon/s/1.2/footer-static.vm").setParameter("locale",$pageLangCode)
+  #end
+
+  <script>
+      window.__LOCALE__='$!locale';
+      window.ServerData = {
+          currentUser: {
+              workNo: "$!workNo",
+              userName: "$!userName",
+              tenant: "$!tenant"
+          }
+      };
+  </script>
+
+  <!--[if lte IE 9]>
+  <script crossorigin src="//alinw.alicdn.com/platform/c/??es5-shim/4.1.12/es5-shim.min.js,es5-shim/4.1.12/es5-sham.min.js,console-polyfill/0.2.1/index.min.js,respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <script crossorigin src="//alinw.alicdn.com/platform/c??jquery/1.11.3/dist/jquery.min.js,react/0.14.6/react-with-addons.min.js,react/0.14.6/react-dom.min.js,es6-promise/3.2.1/es6-promise.min.js,fetch-polyfill/ie8/fetch.js,rsvp.js/3.1.0/rsvp.min.js,natty-storage/1.1.2/dist/natty-storage.min.js,natty-fetch/2.1.2/dist/natty-fetch.pc.min.js,reflux/0.3.0/dist/reflux.min.js"></script>
+  <!-- 使用 Uxcore.Mention 时，需要引入 rangy -->
+  <script crossorigin src="//g.alicdn.com/platform/c/rangy/1.3.0/rangy-core.min.js"></script>
+  <!-- 使用 Uxcore.Tinymce 或 Uxcore.Form.EditorFormField 时，需要引入 tinymce -->
+  <script crossorigin src="//g.alicdn.com/platform/c/tinymce/4.3.12/tinymce.min.js"></script>
+
+  <!-- 审批流组件JS -->
+  #if($cdnUtil.getModuleVersion("$!{appName}/approve-flow"))
+    <script crossorigin src="//$cdnUtil.getDomain()/platform/finance_approve_flow/$cdnUtil.getModuleVersion("$!{appName}/approve-flow")/uxcore.js"></script>
+    <script crossorigin src="//$cdnUtil.getDomain()/platform/finance_approve_flow/$cdnUtil.getModuleVersion("$!{appName}/approve-flow")/app-$!{pageLangCode}.js"></script>
+  #end
+
+  <!-- cg-react JS -->
+  <script crossorigin src="//$cdnUtil.getDomain()/platform/cg-react/$cdnUtil.getModuleVersion("$!{appName}/cg-react")/cg-react.js"></script>
+
+  <!-- 项目JS -->
+  <script crossorigin src="$cdnUtil.getModuleUrl("$!{appName}")/app-$!{pageLangCode}.js"></script>
+  #if($pageCode)
+    <script crossorigin src="$cdnUtil.getModuleUrl("$!{appName}")/$!{pageCode}-$!{pageLangCode}.js"></script>
+  #end
+</body>
+    $control.setTemplate("comm:ceres-vone-global.vm")
+</html>
