@@ -54,7 +54,17 @@ var validParams = function(res,param, msg){
 }
 // 查询商品列表
 router.get("/list", function(req,res,next){
-  Accounts.find(modelCallback(res));
+  var searchData = JSON.parse(req.param('searchData'));
+  for(var key in searchData){
+    if(!searchData[key]){
+      delete searchData[key];
+    }
+    if(key == "platform"){
+      var value = searchData.platform;
+      searchData.platform = { $regex: value + ".+","$options":"i" };
+    }
+  }
+  Accounts.find(searchData,modelCallback(res));
 });
 // 查看密码验证
 router.post("/checkAuthority",function(req,res,next){
