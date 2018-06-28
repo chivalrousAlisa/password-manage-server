@@ -60,8 +60,10 @@ router.get("/list", function(req,res,next){
       delete searchData[key];
     }
     if(key == "platform"){
-      var value = searchData.platform;
-      searchData.platform = { $regex: value + ".+","$options":"i" };
+      //var value = searchData.platform;
+      var reg = new RegExp(searchData.platform,'ig');
+      //searchData.platform = { $regex: value + ".+","$options":"i" };
+      searchData.platform = reg;
     }
   }
   Accounts.find(searchData,modelCallback(res));
